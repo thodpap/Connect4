@@ -23,11 +23,30 @@ function setup() {
   createCanvas(width, height); 
   current_player = '1';
 }
-
+let result = 'draw';
 function draw() {
   background(bg);
   
   drawDiscs();
+
+  result = checkWinner();
+  let checkerIfFull = true;
+  for(let i = 0; i < size; i++){
+    for(let j = 0; j < size; j++){
+      if(board[i][j] == ''){
+        checkerIfFull = false;
+        break;
+      }
+    }
+    if(!checkerIfFull) break;
+  }
+
+  if(result != 'draw'){
+    console.log("Player ",result, " wins");
+  }
+  else{
+    if(checkerIfFull) console.log('draw');
+  }
 }
 function mousePressed(){ 
   let n = floor(mouseX / 40); // n be the side of the grid (0 <= n <= 7)
@@ -72,4 +91,76 @@ function drawDiscs(){
       }
     }
   }
+}
+function checkWinner(){
+  // First check vertically
+  let check_four = 0; 
+  for(let i = 0; i < size; i++){
+    for(let j = 0; j < size; j++){ 
+      if(board[i][j] == '') check_four = 0;
+      else if(board[i][j] == '1'){
+        if(check_four >= 0) check_four++;
+        else check_four = 0;
+      }
+      else{
+        if(check_four > 0) check_four = 0;
+        else check_four--;
+      }
+
+      if(check_four == 4){
+        return '1';
+      }
+      else if(check_four == -4){
+        return '2';
+      } 
+    }
+  }
+  // Check horizontally
+  check_four = 0; 
+  for(let i = 0; i < size; i++){
+    for(let j = 0; j < size; j++){ 
+      if(board[j][i] == '') check_four = 0;
+      else if(board[j][i] == '1'){
+        if(check_four >= 0) check_four++;
+        else check_four = 0;
+      }
+      else{
+        if(check_four > 0) check_four = 0;
+        else check_four--;
+      }
+
+      if(check_four == 4){
+        return '1';
+      }
+      else if(check_four == -4){
+        return '2';
+      } 
+    }
+  }
+
+  // check right diagonally
+  for(let i = 0; i < size - 3; i++){
+    for(let j = 0; j < size - 3; j++){
+        if(board[i][j] == board[i+1][j+1] && 
+          board[i][j] == board[i+2][j+2] && 
+          board[i][j] == board[i+3][j+3]){
+          if(board[i][j] == '1') return '1';
+          else if(board[i][j] == '2') return '2';
+        }
+    }
+  }
+
+  // check left diagonally
+  for(let i = 3; i < size; i++){
+    for(let j = size - 1; j >= 3; j--){
+      if(board[i][j] == board[i-1][j-1] && 
+                        board[i][j] == board[i-2][j-2] &&
+                        board[i][j] == board[i-3][j-3]){
+
+        if(board[i][j] == '1') return '1';
+        else if(board[i][j] == '2') return '2';
+      }
+    }
+  }
+  return 'draw';
 }
