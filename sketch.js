@@ -1,7 +1,7 @@
 let width = 320;
 let height = 320;
 var bg;
-
+let current_player;
 // The board is 8 x 8 
 // empty means neural position
 let size = 8;
@@ -21,8 +21,7 @@ function setup() {
   bg = loadImage('background.jpg');
 
   createCanvas(width, height); 
-
-  console.log("Check");
+  current_player = '1';
 }
 
 function draw() {
@@ -34,7 +33,7 @@ function mousePressed(){
   let n = floor(mouseX / 40); // n be the side of the grid (0 <= n <= 7)
   console.log(n);
 
-  addDisc('Player2',n);
+  addDisc(current_player,n);
 }
 
 function addDisc(player,n){
@@ -42,7 +41,14 @@ function addDisc(player,n){
   // Else yellow
   for(let i = 0; i < size; ++i){
     if(board[n][i] == ''){  
-      if(player == 'Player1'){
+      // change players status since the move was legal
+      if(current_player == '1'){
+        current_player = '2';
+      }else{
+        current_player = '1'
+      }
+
+      if(player == '1'){
         board[n][i] = '1';
       }else{
         board[n][i] = '2';
