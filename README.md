@@ -7,3 +7,4 @@ And run:
 	http-server
 
 
+Better run with Firefox
